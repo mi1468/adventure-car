@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class zombicar : MonoBehaviour
 {
-     public GameObject cam , effectsound , explosion;
+     public GameObject cam , effectsound , explosion , endgame;
     private void OnCollisionEnter(Collision other) {
         if(other.gameObject.name == "destination")
         {
@@ -36,6 +36,23 @@ public class zombicar : MonoBehaviour
     {
         
     }
+    public void reStart()
+    {
+            Application.LoadLevel(0 );
+
+    }
+    public void exitapp()
+    {
+           if (Application.platform == RuntimePlatform.Android)
+             {
+                 AndroidJavaObject activity = new AndroidJavaClass("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject>("currentActivity");
+                 activity.Call<bool>("moveTaskToBack", true);
+             }
+             else
+             {
+                 Application.Quit();
+             }
+    }
     public void resetlevel(){
             Application.LoadLevel(Application.loadedLevel );
     }
@@ -43,8 +60,15 @@ public class zombicar : MonoBehaviour
      { 
         yield return new WaitForSeconds(2);
    
-            Application.LoadLevel(Application.loadedLevel + 1);
-        
+   if(Application.loadedLevel == 2)
+   {
+       endgame.SetActive(true);
+   }else
+   {
+
+          Application.LoadLevel(Application.loadedLevel + 1);
+        }
+     
 
      }
 }
